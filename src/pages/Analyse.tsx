@@ -6,7 +6,9 @@ import ArchitectureScore from "@/components/ArchitectureScore";
 import ScoreBreakdown from "@/components/ScoreBreakdown";
 import CostAnalysis from "@/components/CostAnalysis";
 import Recommendations from "@/components/Recommendations";
-import { analyzeArchitecture, type AnalysisResult } from "@/lib/analyzeArchitecture";
+import { type AnalysisResult } from "@/lib/analyzeArchitecture";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const PLACEHOLDER = `Example: We use 3 EC2 instances behind an ALB with Auto Scaling. RDS PostgreSQL with Multi-AZ for the database. CloudFront CDN for static assets. VPC with private subnets, WAF enabled. Redis ElastiCache for session management. CloudWatch for monitoring.`;
 
@@ -19,11 +21,19 @@ const Analyse = () => {
     if (!input.trim()) return;
     setIsAnalyzing(true);
     setResult(null);
-    // Simulate processing delay
-    await new Promise((r) => setTimeout(r, 1500));
-    const analysis = analyzeArchitecture(input);
-    setResult(analysis);
-    setIsAnalyzing(false);
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-architecture', {
+        body: { description: input },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      setResult(data as AnalysisResult);
+    } catch (err: any) {
+      console.error('Analysis failed:', err);
+      toast.error(err.message || 'Analysis failed. Please try again.');
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   return (

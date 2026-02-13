@@ -1,1 +1,4 @@
 project_id = "xvfibeyegbceyivvzein"
+
+[functions.analyze-architecture]
+verify_jwt = false
