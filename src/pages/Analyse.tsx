@@ -206,6 +206,7 @@ const Analyse = () => {
                 </motion.div>
               )}
             </AnimatePresence>
+
           </div>
         </div>
       </div>
