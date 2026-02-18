@@ -54,6 +54,7 @@ const Dashboard = () => {
       <div className="relative min-h-screen w-full overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Particles
+            className="absolute inset-0"
             particleColors={["#ffffff"]}
             particleCount={200}
             particleSpread={10}

@@ -173,7 +173,7 @@ const Particles = ({
         colors.set(col, i * 3);
       }
 
-      const geometry = new Geometry(gl, { mode: gl.POINTS, position: { size: 3, data: positions }, random: { size: 4, data: randoms }, color: { size: 3, data: colors } });
+      const geometry = new Geometry(gl, { position: { size: 3, data: positions }, random: { size: 4, data: randoms }, color: { size: 3, data: colors } } as any);
 
       const program = new Program(gl, {
         vertex,
